@@ -114,17 +114,18 @@ public class PIDetail
 ```
 🖼️ Sample Output
 
-### Universal Summary Report  
-![Universal Summary](images/samples/summary-with-details.png)
+### Universal Summary with Details Report  
+![Universal Summary](https://raw.githubusercontent.com/ShuvaDebNath/ErpQueryAssist/main/WebAssets/samples/summary-with-details.png)
 
 ---
 
 ### Month-wise Pivot by Client  
-![Month-wise Client Pivot](images/samples/client-wise-pivot.png)
+![Universal Summary](https://raw.githubusercontent.com/ShuvaDebNath/ErpQueryAssist/main/WebAssets/samples/client-wise-pivot.png)
 
+---
 
 ### Month-wise Pivot  
-![Month-wise Client Pivot](images/samples/month-summary.png)
+![Universal Summary](https://raw.githubusercontent.com/ShuvaDebNath/ErpQueryAssist/main/WebAssets/samples/month-summary.png)
 
 
 
