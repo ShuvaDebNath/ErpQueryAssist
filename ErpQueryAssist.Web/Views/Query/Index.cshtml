@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "ERP Query Assistant";
+    var types = ViewBag.QueryTypes as List<string>;
+}
+
+<div class="container mt-4">
+    <h3 class="mb-3">Ask a Question From Your ERP System</h3>
+
+    <!-- Loader Overlay -->
+    <div id="loader" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); z-index:9999; text-align:center; padding-top:200px;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3">Analyzing your query...</p>
+    </div>
+
+    <!-- Input Form -->
+
+    <div class="row">
+        <div class="col-md-2 mb-2">
+            <label for="queryType" class="form-label">Select Query Type</label>
+            <select id="queryType" name="queryType" class="form-select" required>
+                <option disabled selected value="">-- Choose a type --</option>
+                @foreach (var type in types)
+                {
+                    <option value="@type">@type</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-10 mb-3">
+            <label for="userQuery" class="form-label">Your Question</label>
+            <input type="text" id="userQuery" name="userQuery" class="form-control"
+                   placeholder="e.g. How many PIs were created in the last 7 days?" required />
+        </div>
+
+    </div>
+    
+
+    <button type="button" class="btn btn-primary" onclick="showLoaderAndOpenTab()">Ask</button>
+
+
+    <hr class="my-4" />
+    <div class="alert alert-light d-flex align-items-center mt-4 shadow-sm border border-info rounded-pill px-3" role="alert" style="font-size: 1rem;">
+        <i class="bi bi-info-circle-fill text-primary me-2"></i>
+        <div>
+            <strong>Need help?</strong> See examples with images
+            <span class="ms-2 fs-5">👇</span>
+        </div>
+    </div>
+
+    <div class="accordion" id="sampleQuestionsAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+                    🧠 Give me Month wise PIVOT data where I need to see how many PIs were created in between June to July 2025?
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#sampleQuestionsAccordion">
+                <div class="accordion-body">
+                    <p>This shows a month-wise PI summary.</p>
+                    <img src="~/images/samples/month-summary.png" class="img-fluid border" style="max-width: 1208px;" />
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                    📊 Give me Month wise PIVOT data where I need to see how many PIs were created in between June to July 2025, grouped by client
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#sampleQuestionsAccordion">
+                <div class="accordion-body">
+                    <p>This shows a pivot with client-wise breakdown.</p>
+                    <img src="~/images/samples/client-wise-pivot.png" class="img-fluid border" style="max-width: 1208px;" />
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                    📅 How many PIs were created in between June to July 2025
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#sampleQuestionsAccordion">
+                <div class="accordion-body">
+                    <p>This gives a summary with details report</p>
+                    <img src="~/images/samples/summary-with-details.png" class="img-fluid border" style="max-width: 1208px;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        function showLoaderAndOpenTab() {
+            const queryType = document.getElementById("queryType").value;
+            const userQuery = document.getElementById("userQuery").value;
+
+            if (!queryType || !userQuery) {
+                alert("Please select a query type and enter your question.");
+                return;
+            }
+
+            document.getElementById("loader").style.display = "block";
+
+            setTimeout(function () {
+                const encodedQuery = encodeURIComponent(userQuery);
+                const url = `/Query/AskAndAnalyzeUnified?question=${encodedQuery}&type=${queryType}`;
+                window.open(url, "_blank");
+
+                document.getElementById("loader").style.display = "none";
+            }, 1000); // 1 second delay
+        }
+    </script>
+}

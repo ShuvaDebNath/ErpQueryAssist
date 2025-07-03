@@ -1,0 +1,11 @@
+﻿@model string
+
+@{
+    ViewData["Title"] = "Oops! Something went wrong.";
+}
+
+<div class="alert alert-warning text-center mt-5">
+    <h2>@ViewData["Title"]</h2>
+    <p>@Model</p>
+    <a href="javascript:history.back()" class="btn btn-primary mt-3">Go Back</a>
+</div>

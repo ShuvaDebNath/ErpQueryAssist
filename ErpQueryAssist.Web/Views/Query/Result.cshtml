@@ -1,0 +1,75 @@
+﻿@model ErpQueryAssist.Web.ViewModels.UserQueryResultViewModel
+
+<h2>Query Result</h2>
+
+<p><strong>Query:</strong> @Model.QueryText</p>
+<p><strong>SQL Generated:</strong> <code>@Model.SqlGenerated</code></p>
+<p><strong>Summary:</strong> @Model.Summary</p>
+
+<div id="tableContainer" class="table-responsive mt-4"></div>
+
+@if (!string.IsNullOrEmpty(Model.JsonData))
+{
+    <script>
+        const jsonData = @Html.Raw(Model.JsonData);
+
+        function renderTable(data) {
+            if (!Array.isArray(data) || data.length === 0) {
+                document.getElementById('tableContainer').innerHTML = "<p>No data returned.</p>";
+                return;
+            }
+
+            let table = '<table class="table table-bordered table-sm table-striped">';
+            table += '<thead><tr>';
+
+            // Render headers
+            for (let key in data[0]) {
+                table += `<th>${key}</th>`;
+            }
+            table += '</tr></thead><tbody>';
+
+            // Render rows
+            data.forEach(row => {
+                table += '<tr>';
+                for (let key in row) {
+                    table += `<td>${row[key]}</td>`;
+                }
+                table += '</tr>';
+            });
+
+            table += '</tbody></table>';
+
+            document.getElementById('tableContainer').innerHTML = table;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            renderTable(jsonData);
+        });
+    </script>
+}
+else
+{
+    <p class="text-danger">No data available to show.</p>
+}
+
+
+
+@* @model ErpQueryAssist.Web.ViewModels.UserQueryResultViewModel
+
+<h2>Query Result</h2>
+
+<p><strong>Query:</strong> @Model.QueryText</p>
+<p><strong>SQL Generated:</strong> @Model.SqlGenerated</p>
+<p><strong>Summary:</strong> @Model.Summary</p>
+
+@if (!string.IsNullOrEmpty(Model.JsonData))
+{
+    <h4>Raw Data</h4>
+    <pre>@Model.JsonData</pre>
+}
+
+@if (!string.IsNullOrEmpty(Model.ChartType))
+{
+    <p>Chart Placeholder: @Model.ChartType chart would be rendered here.</p>
+}
+ *@

@@ -1,0 +1,68 @@
+﻿@using System.Globalization
+@using ErpQueryAssist.Application.Models.Pivot
+@model List<ClientMonthPivotData>
+
+@{
+    ViewData["Title"] = "Client-wise Order Pivot Report";
+    var months = Model.Select(x => x.MonthLabel).Distinct().OrderBy(m => m).ToList();
+    var clients = Model.Select(x => x.ClientName).Distinct().ToList();
+
+}
+
+<table class="table table-bordered table-hover">
+    <thead class="table-primary">
+        <tr>
+            <th rowspan="2">#</th>
+            <th rowspan="2">Client Name</th>
+            @foreach (var month in months)
+            {
+                string label = string.IsNullOrEmpty(month) ? "N/A" : DateTime.ParseExact(month, "yyyy-MM", CultureInfo.InvariantCulture).ToString("MMMM yyyy");
+                @* var label = DateTime.ParseExact(month, "yyyy-MM", CultureInfo.InvariantCulture).ToString("MMMM yyyy"); *@
+                <th colspan="3" class="text-center">@label</th>
+            }
+        </tr>
+        <tr>
+            @foreach (var month in months)
+            {
+                <th style="text-align:center">No of PI</th>
+                <th style="text-align:center">Qty</th>
+                <th style="text-align:center">Amount</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int serial = 1;
+        }
+        @foreach (var client in clients)
+        {
+            <tr>
+                <td>@serial</td>
+                <td>@client</td>
+                @foreach (var month in months)
+                {
+                    var data = Model.FirstOrDefault(x => x.ClientName == client && x.MonthLabel == month);
+                    <td style="text-align:center">@((data?.TotalPIs ?? 0) == 0 ? "-" : data.TotalPIs.ToString("N0"))</td>
+                    <td style="text-align:center">@((data?.TotalQty ?? 0) == 0 ? "-" : data.TotalQty.ToString("N0"))</td>
+                    <td style="text-align:right"> @((data?.TotalAmount ?? 0) == 0 ? "-" : data.TotalAmount.ToString("N0"))</td>
+                }
+            </tr>
+            serial++;
+        }
+    </tbody>
+    <tfoot class="table-light fw-bold">
+        <tr>
+            <td colspan="2" class="text-end">Total:</td>
+            @foreach (var month in months)
+            {
+                var monthData = Model.Where(x => x.MonthLabel == month);
+                var totalPIs = monthData.Sum(x => x.TotalPIs);
+                var totalQty = monthData.Sum(x => x.TotalQty);
+                var totalAmount = monthData.Sum(x => x.TotalAmount);
+                <td style="text-align:center">@totalPIs.ToString("N0")</td>
+                <td style="text-align:center">@totalQty.ToString("N0")</td>
+                <td style="text-align:right">@totalAmount.ToString("N0")</td>
+            }
+        </tr>
+    </tfoot>
+</table>

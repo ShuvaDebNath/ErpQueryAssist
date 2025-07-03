@@ -1,0 +1,77 @@
+# Build and Release
+bin/
+obj/
+out/
+Debug/
+Release/
+
+# User-specific files
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+Generated_Code/
+*.g.cs
+*.g.i.cs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Rider
+*.sln.iml
+
+# ASP.NET Core specific
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+
+# EF Core
+Migrations/
+
+# Logs
+*.log
+logs/
+*.tlog
+
+# Visual Studio
+.vs/
+*.dbmdl
+*.cache
+*.pdb
+
+# Dotnet
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet
+*.nupkg
+.nuget/
+packages/
+*.snupkg
+
+# Secrets
+secrets.json
+
+# Coverage reports
+TestResults/
+coverage/
+coverage.cobertura.xml
+*.coverage
+*.coveragexml
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Node modules (if using npm/yarn in frontend)
+node_modules/
+dist/
+.env
+.env.*.local

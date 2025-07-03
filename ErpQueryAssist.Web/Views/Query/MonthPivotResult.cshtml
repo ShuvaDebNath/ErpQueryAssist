@@ -1,0 +1,51 @@
+﻿@using ErpQueryAssist.Application.Models.Pivot
+@using System.Globalization
+@model List<MonthPivotData>
+
+@{
+    ViewData["Title"] = "Month-wise Order Pivot Report";
+    var months = Model.Select(x => x.MonthLabel).Distinct().ToList();
+}
+
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-primary">
+        <tr>
+            <th>Metrics</th>
+            @foreach (var month in months)
+            {
+                var formatted = DateTime.ParseExact(month, "yyyy-MM", CultureInfo.InvariantCulture).ToString("MMMM yyyy");
+                <th class="text-center">@formatted</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Total PIs</td>
+            @foreach (var month in months)
+            {
+                var data = Model.FirstOrDefault(x => x.MonthLabel == month);
+                <td style="text-align:center">@(data?.TotalPIs.ToString("N0") ?? "0")</td>
+            }
+        </tr>
+        <tr>
+            <td>Total Qty</td>
+            @foreach (var month in months)
+            {
+                var data = Model.FirstOrDefault(x => x.MonthLabel == month);
+                <td style="text-align:center">@(data?.TotalQty.ToString("N0") ?? "0")</td>
+            }
+        </tr>
+        <tr>
+            <td>Total Amount</td>
+            @foreach (var month in months)
+            {
+                var data = Model.FirstOrDefault(x => x.MonthLabel == month);
+                <td style="text-align:center">@(data?.TotalAmount.ToString("N0") ?? "0")</td>
+            }
+        </tr>
+    </tbody>
+</table>
+

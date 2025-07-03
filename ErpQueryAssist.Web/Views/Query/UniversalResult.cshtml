@@ -1,0 +1,141 @@
+﻿@model ErpQueryAssist.Web.ViewModels.UniversalQueryResultViewModel
+@using System.Linq
+
+@{
+    ViewData["Title"] = "Query Result";
+    var item = Model.SummaryDataList?.FirstOrDefault();
+}
+
+<h3 class="mb-4">@Model.OriginalQuestion</h3>
+
+<!-- ✅ Summary Card Layout -->
+@if (item != null)
+{
+    <h4>@Model.SummaryTitle</h4>
+    <div class="row mb-4">
+
+        <!-- Total PI -->
+        <div class="col-md-4">
+            <div class="card border-success p-3 text-center">
+                <h6>No of PI</h6>
+                <h4 class="text-success fw-bold">@item.TotalPIs.ToString("N0")</h4>
+            </div>
+        </div>
+
+        <!-- Total Qty -->
+        <div class="col-md-4">
+            <div class="card border-primary p-3 text-center">
+                <h6>Total Qty in KGs</h6>
+                <h4 class="text-primary fw-bold">@item.TotalQty.ToString("N0")</h4>
+            </div>
+        </div>
+
+        <!-- Total Amount -->
+        <div class="col-md-4">
+            <div class="card border-dark p-3 text-center">
+                <h6>Total Amount</h6>
+                <h4 class="text-dark fw-bold">@item.TotalAmount.ToString("N0")</h4>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@if (Model.DetailsDataList != null && Model.DetailsDataList.Any())
+{
+    <div class="card shadow-sm border-0 mb-4" style="border-radius: 16px;">
+        <div class="card-header text-white" style="background: linear-gradient(135deg, #4e73df, #1cc88a); border-top-left-radius: 16px; border-top-right-radius: 16px;">
+            <h5 class="mb-0">📋 PI Order Details</h5>
+        </div>
+        <div class="card-body p-4">
+            <table class="table table-hover align-middle text-center">
+                <thead style="background-color: #f1f4f8;">
+                    <tr class="fw-semibold">
+                        <th>S/N</th>
+                        <th>Approve Date</th>
+                        <th>PI Type</th>
+                        <th>Client Name</th>
+                        <th>PI Number</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                        <th>Marketing Person</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int serial = 1;
+                        decimal totalQty = 0;
+                        decimal totalAmount = 0;
+                    }
+
+                    @foreach (var items in Model.DetailsDataList)
+                    {
+                        totalQty += items.Qty;
+                        totalAmount += items.Amount;
+                        <tr>
+                            <td>@serial</td>
+                            <td>@items.ApproveDate.ToString("yyyy-MM-dd")</td>
+                            <td>@items.PIType</td>
+                            <td style="text-align:left;">@items.ClientName</td>
+                            <td>@items.PINumber</td>
+                            <td>@items.Qty.ToString("N2")</td>
+                            <td style="text-align:right;">@items.Amount.ToString("N2")</td>
+                            <td>@items.PIReference</td>
+                        </tr>
+                        serial++;
+                    }
+
+                    <!-- Summary row -->
+                    <tr style="background-color: #e2f0d9;" class="fw-bold">
+                        <td colspan="5" class="text-end">Total</td>
+                        <td>@totalQty.ToString("N2")</td>
+                        <td>@totalAmount.ToString("N2")</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}
+
+@* <button id="saveBtn" class="btn btn-success">Save Analysis</button> *@
+
+@section Scripts {
+    <script>
+        document.getElementById("saveBtn").addEventListener("click", async () => {
+            const payload = {
+                userQuestion: document.getElementById("questionInput").value,
+                summaryJson: JSON.stringify(summaryData),
+                detailsJson: JSON.stringify(detailsData),
+            };
+
+            const response = await fetch('/save-analysis', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        });
+    </script>
+}
+
+
+
+
+
+
+@* @if (!string.IsNullOrEmpty(Model.DetailsJson))
+{
+    <h4>@Model.DetailsTitle</h4>
+    <div id="detailsContainer">@Html.Raw(Model.DetailsJson)</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ChartJson))
+{
+    <h4>@Model.ChartTitle</h4>
+    <div id="chartContainer">@Html.Raw(Model.ChartJson)</div>
+} *@

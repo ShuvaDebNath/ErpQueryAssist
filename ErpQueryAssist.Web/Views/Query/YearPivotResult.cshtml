@@ -1,0 +1,37 @@
+﻿@using ErpQueryAssist.Application.Models.Pivot
+@model List<YearPivotData>
+
+@{
+    ViewData["Title"] = "Year-wise Order Pivot Report";
+    var years = Model.Select(x => x.Year).Distinct().OrderBy(x => x).ToList();
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-success">
+        <tr>
+            <th>Metrics</th>
+            @foreach (var year in years)
+            {
+                <th>@year</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Total Qty</td>
+            @foreach (var year in years)
+            {
+                <td>@Model.FirstOrDefault(x => x.Year == year)?.TotalQty.ToString("N0")</td>
+            }
+        </tr>
+        <tr>
+            <td>Total Amount</td>
+            @foreach (var year in years)
+            {
+                <td>@Model.FirstOrDefault(x => x.Year == year)?.TotalAmount.ToString("N0")</td>
+            }
+        </tr>
+    </tbody>
+</table>
