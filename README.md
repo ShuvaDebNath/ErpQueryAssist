@@ -113,6 +113,10 @@ public class PIDetail
 </table>
 ```
 🖼️ Sample Output
+### Landing Page  
+![Landing_page](https://raw.githubusercontent.com/ShuvaDebNath/ErpQueryAssist/main/WebAssets/samples/landing_page.png)
+
+---
 
 ### Universal Summary with Details Report  
 ![Universal Summary](https://raw.githubusercontent.com/ShuvaDebNath/ErpQueryAssist/main/WebAssets/samples/summary-with-details.png)
