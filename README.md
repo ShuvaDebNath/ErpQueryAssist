@@ -1,3 +1,6 @@
+[![Deploy to EC2](https://github.com/ShuvaDebNath/ErpQueryAssist/actions/workflows/deploy.yml/badge.svg)](https://github.com/ShuvaDebNath/ErpQueryAssist/actions/workflows/deploy.yml)
+
+
 # ERP Query Assistant - RAG UI Rendering (Dynamic View)
 
 This README explains how we implemented a dynamic Razor view in an ASP.NET Core MVC application to support a Retrieval-Augmented Generation (RAG) workflow that generates SQL from natural language and displays fully dynamic UI outputs.
