@@ -3,31 +3,6 @@ namespace ErpQueryAssist.Application.Services;
 
 public class PromptTemplateService
 {
-    public string GetSystemPromptForOrder()
-    {
-        return @"
-    You are a SQL assistant for an ERP system. Use SQL Server only.
-
-    Schema:
-
-    - tblPIOderQty_infomation (ClinetId, Status, MakeDate, PINumber, MakeBy)
-    - tblClientInformation (ClinetId, ClientName)
-
-    To get the client name, use the join:
-    tblPIOderQty_infomation.ClinetId = tblClientInformation.ClinetId
-
-    Important Rules:
-    - Use ONLY the table name: tblPIOderQty_infomation (not ""Order"", not ""information"")
-    - Use Status = 'CPI' to find closed PI
-    - Only return valid SQL Server SELECT statements
-    - Do NOT add explanations or comments
-    - Do NOT guess table or column names
-    - Do NOT include code blocks like ```sql or '''sql. Just return raw SQL text.
-
-    ⚠️ Note: In this database, the column name is misspelled as `ClinetId`. Use it **exactly** as written.
-    ";
-    }
-
     public string GetUnifiedPromptForOrder(string userQuestion)
     {
         return $@"
@@ -158,32 +133,5 @@ User Question:
 
 Return all 3 queries below. Start directly with SELECT. Do not explain.
 ";
-    }
-
-
-    public string GetPromptInstruction(string type)
-    {
-        return type switch
-        {
-            "summary" => "Generate a SQL query that returns a single count or total.",
-            "details" => "Generate a SQL query that returns a detailed list: client name, PI number, make date, and make by.",
-            "chart" => "Generate a SQL query that returns PI closed count per month (group by MakeDate).",
-            _ => throw new ArgumentException("Invalid prompt type.")
-        };
-    }
-
-    public string GetUnifiedPromptForDelivery(string question)
-    {
-        return $"You asked about Delivery: {question} (prompt logic coming soon)";
-    }
-
-    public string GetUnifiedPromptForProduction(string question)
-    {
-        return $"You asked about Production: {question} (prompt logic coming soon)";
-    }
-
-    public string GetUnifiedPromptForAccounts(string question)
-    {
-        return $"You asked about Accounts: {question} (prompt logic coming soon)";
     }
 }

@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  erpqueryassistweb:
+    image: shuvanath/erpqueryassistweb:v1
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=${DefaultConnection}
+      - OpenAI__ApiKey=${OpenAI_ApiKey}
