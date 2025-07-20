@@ -17,7 +17,7 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/erpqueryassistweb:v1 ./ErpQueryAssist.Web
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/erpqueryassistweb:v1 .
         docker push ${{ secrets.DOCKER_USERNAME }}/erpqueryassistweb:v1
 
     - name: Deploy via SSH
