@@ -134,4 +134,19 @@ User Question:
 Return all 3 queries below. Start directly with SELECT. Do not explain.
 ";
     }
+
+    public string GetUnifiedPromptForDelivery(string question)
+    {
+        return $"You asked about Delivery: {question} (prompt logic coming soon)";
+    }
+
+    public string GetUnifiedPromptForProduction(string question)
+    {
+        return $"You asked about Production: {question} (prompt logic coming soon)";
+    }
+
+    public string GetUnifiedPromptForAccounts(string question)
+    {
+        return $"You asked about Accounts: {question} (prompt logic coming soon)";
+    }
 }
