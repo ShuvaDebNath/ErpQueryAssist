@@ -1,35 +1,50 @@
--- Summary Query --
-SELECT 
-    COUNT(DISTINCT pio.PI_Id) AS TotalPIs,
-    SUM(pom.TotalPIQty) AS TotalQty,
-    SUM(CASE WHEN cu.CurrencyShortName = 'USD' THEN pom.TotalAmount * d.Dollar ELSE pom.TotalAmount END) AS TotalAmount
-FROM 
-    tblPIOderQty_infomation pio
-LEFT JOIN 
-    tblPIOrder_Qty_Master_Info pom ON pio.PI_Id = pom.PI_Id
-LEFT JOIN 
-    tblModeOfCurrency cu ON pio.CurrencyId = cu.CurrencyId
-LEFT JOIN 
-    DollarRate d ON pio.DollarId = d.DollarId
+WITH TopN AS (
+    SELECT TOP 10
+        pio.PI_Id,
+        pio.ApproveDate,
+        pio.PIType,
+        ci.ClientName,
+        pio.PINumber,
+        pom.TotalPIQty AS Qty,
+        CASE 
+            WHEN cu.CurrencyShortName = 'USD' THEN pom.TotalAmount * d.Dollar
+            ELSE pom.TotalAmount
+        END AS Amount,
+        pio.PIReference
+    FROM tblPIOderQty_infomation pio
+    LEFT JOIN tblClientInformation ci ON pio.ClinetId = ci.ClinetId
+    LEFT JOIN tblPIOrder_Qty_Master_Info pom ON pio.PI_Id = pom.PI_Id
+    LEFT JOIN tblModeOfCurrency cu ON pio.CurrencyId = cu.CurrencyId
+    LEFT JOIN DollarRate d ON pio.DollarId = d.DollarId
+    WHERE pio.ApproveDate >= '2025-07-01' AND pio.ApproveDate <= '2025-07-31'
+    ORDER BY pio.ApproveDate DESC
+)
 
--- Details Query --
 SELECT 
-    pio.ApproveDate, 
-    pio.PIType, 
-    ci.ClientName, 
-    pio.PINumber, 
-    pom.TotalPIQty AS Qty, 
-    CASE WHEN cu.CurrencyShortName = 'USD' THEN pom.TotalAmount * d.Dollar ELSE pom.TotalAmount END AS Amount, 
+    COUNT(DISTINCT PI_Id) AS TotalPIs,
+    SUM(Qty) AS TotalQty,
+    SUM(Amount) AS TotalAmount
+FROM TopN;
+
+
+SELECT 
+    pio.ApproveDate,
+    pio.PIType,
+    ci.ClientName,
+    pio.PINumber,
+    pom.TotalPIQty AS Qty,
+    CASE 
+        WHEN cu.CurrencyShortName = 'USD' THEN pom.TotalAmount * d.Dollar
+        ELSE pom.TotalAmount
+    END AS Amount,
     pio.PIReference
-FROM 
-    tblPIOderQty_infomation pio
-JOIN 
-    tblClientInformation ci ON pio.ClinetId = ci.ClinetId
-JOIN 
-    tblPIOrder_Qty_Master_Info pom ON pio.PI_Id = pom.PI_Id
-LEFT JOIN 
-    tblModeOfCurrency cu ON pio.CurrencyId = cu.CurrencyId
-LEFT JOIN 
-    DollarRate d ON pio.DollarId = d.DollarId
+FROM tblPIOderQty_infomation pio
+LEFT JOIN tblClientInformation ci ON pio.ClinetId = ci.ClinetId
+LEFT JOIN tblPIOrder_Qty_Master_Info pom ON pio.PI_Id = pom.PI_Id
+LEFT JOIN tblModeOfCurrency cu ON pio.CurrencyId = cu.CurrencyId
+LEFT JOIN DollarRate d ON pio.DollarId = d.DollarId
+WHERE pio.ApproveDate >= '2025-07-01' AND pio.ApproveDate <= '2025-07-31'
+ORDER BY pio.ApproveDate DESC;
 
--- Pivot Query --
+
+Report Type: universal
